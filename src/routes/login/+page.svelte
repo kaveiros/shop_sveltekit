@@ -28,7 +28,7 @@
                 <label class="label" for="email">
                     <span class="label-text">Email</span>
                 </label>
-                <input type="email" id="email"  placeholder="Enter your email" class="input input-bordered w-full" />
+                <input type="email" id="email" name="email" placeholder="Enter your email" class="input input-bordered w-full" />
             </div>
 
             <!-- Password Field -->
@@ -36,7 +36,7 @@
                 <label class="label" for="password">
                     <span class="label-text">Password</span>
                 </label>
-                <input type="password" id="password" placeholder="Enter your password" class="input input-bordered w-full" />
+                <input type="password" id="password" name="password" placeholder="Enter your password" class="input input-bordered w-full" />
             </div>
 
             <!-- Login Button -->

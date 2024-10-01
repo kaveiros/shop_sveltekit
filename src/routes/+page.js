@@ -1,3 +1,9 @@
-// since there's no dynamic data here, we can prerender
-// it so that it gets served as a static asset in production
-export const prerender = true;
+// import {BASE_URL} from "$env/static/private";
+//
+// export async function load({items}) {
+//     let itemsResponse = await fetch(`${BASE_URL}/list-items`, {
+//         method: 'GET',
+//         headers: {"Content-type": "application/json"}
+//     });
+//
+//     return {items: await itemsResponse.json()}}

@@ -17,7 +17,12 @@
         console.log('Email:', email);
         console.log('Password:', password);
     }
+
+    let message;
 </script>
+{#if form?.error}
+<p>{form?.error}</p>
+{/if}
 <form method="POST" action="?/login" use:enhance>
     <div class="flex items-center justify-center min-h-screen bg-base-200">
         <div class="card w-full max-w-md bg-base-100 shadow-xl p-8">

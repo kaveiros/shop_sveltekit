@@ -1,8 +1,11 @@
-<!--<script>-->
-<!--    import '../../app.css';-->
-<!--</script>-->
+<script>
+    import { initializeStores, Toast } from '@skeletonlabs/skeleton';
+
+    initializeStores();
+</script>
 
 <div class="app">
+    <Toast />
     <main>
         <slot></slot>
     </main>

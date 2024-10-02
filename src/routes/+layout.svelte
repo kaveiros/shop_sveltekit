@@ -1,18 +1,22 @@
-<script>import Header from './Header.svelte';
-import '../app.css';</script>
+<script>
+	import Header from './Header.svelte';
+	import '../app.css';
+</script>
 
 <div class="app">
-	<Header></Header>
+	<!-- AppBar (Header) -->
+	<Header />
 
+	<!-- Main content area -->
 	<main>
 		<slot></slot>
 	</main>
 
+	<!-- Footer -->
 	<footer>
-		<!-- <p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p> -->
+		<p>Sample e-commerce shop 2024</p>
 	</footer>
 </div>
-
 
 <style>
 	.app {

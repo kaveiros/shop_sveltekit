@@ -1,6 +1,6 @@
 import {BASE_URL} from "$env/static/private";
 
-export async function load({fetch}) {
+export async function load() {
     let itemsResponse = await fetch(`${BASE_URL}/list-items`, {
         method: 'GET',
         headers: {"Content-type": "application/json"}

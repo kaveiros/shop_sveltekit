@@ -1,29 +1,41 @@
-import jwt from 'jsonwebtoken';
-import {JWT_SECRET} from "$env/static/private";
+import {redirect} from "@sveltejs/kit";
 
 
 export async function handle({event, resolve}) {
-    const { headers } = event.request;
-    const cookie = event.cookies.get('AuthorizationToken');
 
-    console.log("Inside hook", event.cookies.get('AuthorizationToken'))
-
-    if (event.request.url === "/admin-area"){
-
+    let user = null;
+    let allowedPaths = ["/", "/about", "/login"];
+    function isPathAllowed(path) {
+        return allowedPaths.some(allowedPath =>
+            path === allowedPath || path.startsWith(allowedPath + '/')
+        );
     }
 
-    if (!cookie) {
-       // throw new Error("User not found or not logged in");
+    if (event.cookies.get('user') !== undefined && event.cookies.get('user') ) {
+        user = JSON.parse(event.cookies.get('user'));
     }
 
-    try{
-        const token = cookie.split(" ")[1];
-        console.log("Token : ",token)
-        let decoded = jwt.verify(token, JWT_SECRET, null);
-        console.log(decoded)
-    }catch (e) {
-        //throw new Error("Something went wrong")
+    const url = new URL(event.request.url);
+    if (!user && !isPathAllowed(url.pathname)) {
+        throw redirect(302, '/');
     }
 
-    return await resolve(event)
+    if(user){
+        event.locals.user = user
+        if(url.pathname.includes("/admin-area")){
+            if (user.role !== "administrator"){
+               throw redirect(302, "/")
+            }
+        }
+
+
+        // redirect user if he is already logged if he try to access signin or signup
+        if(url.pathname.includes('/login')){
+            throw redirect(302, '/')
+        }
+    }
+
+
+             return await resolve(event)
+
 }

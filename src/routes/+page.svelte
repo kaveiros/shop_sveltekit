@@ -3,8 +3,6 @@
 	export let data;
 	export let error;
 
-	console.log("Items --->>", data);
-	console.log("Error --->>", error);
 
 	function addToCart(event) {
 		console.log("Added to card ", event)

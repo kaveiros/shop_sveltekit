@@ -1,103 +1,150 @@
 <script>
-	import { page } from '$app/stores';
-	import {AppBar} from "@skeletonlabs/skeleton";
+	import { Avatar, AppBar } from '@skeletonlabs/skeleton';
+	import {user} from "$lib/stores/user.js";
+
+	export  let userFromStore = user;
+
+	let userData = {}
+	// Dummy user data for the avatar
+	if (user){
+		userData = {
+			name: user.email,
+			avatarUrl: 'https://images.unsplash.com/photo-1617296538902-887900d9b592?ixid=M3w0Njc5ODF8MHwxfGFsbHx8fHx8fHx8fDE2ODc5NzExMDB8&ixlib=rb-4.0.3&w=128&h=128&auto=format&fit=crop', // Replace with actual user image URL
+
+		}
+	}
+
+	let menuVisible = false;
+	let avatarMenuVisible = false;
+
+	function toggleMenu() {
+		const menu = document.querySelector('.menu-dropdown');
+		menu.hidden = !menu.hidden;
+		menuVisible = !menuVisible;
+	}
+
+	function toggleAvatarMenu() {
+		const avatarMenu = document.getElementById('#dropdown');
+		avatarMenu.hidden = !avatarMenu.hidden;
+		avatarMenuVisible = !avatarMenuVisible;
+	}
 </script>
 
-<header>
-	<AppBar gridColumns="grid-cols-12" >
-		<nav>
-			<svg viewBox="0 0 2 3" aria-hidden="true">
-				<path d="M0,0 L1,2 C1.5,3 1.5,3 2,3 L2,0 Z" />
-			</svg>
-			<ul>
-				<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-					<a href="/">Home</a>
-				</li>
-				<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-					<a href="/about">About</a>
-				</li>
-				<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-					<a href="/sverdle">Sverdle</a>
-				</li>
-				<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-					<a href="/login">Login</a>
-				</li>
-			</ul>
-			<svg viewBox="0 0 2 3" aria-hidden="true">
-				<path d="M0,0 L0,3 C0.5,3 0.5,3 1,2 L2,0 Z" />
-			</svg>
+<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end" class="flex-container">
+	<svelte:fragment slot="lead">
+			<div class="menu-container">
+				<button class="menu-btn" on:click="{toggleMenu}">
+					☰
+				</button>
+				<div class="menu-dropdown" hidden>
+					<ul>
+						<li><a href="/">Products</a></li>
+						<li><a href="/about">About</a></li>
+						<li><a href="/contact">Contact</a></li>
+						<li><a href="/login">Login</a></li>
+						<li><a href="/user-profile">Profile</a></li>
+						<li><a href="/settings">Settings</a></li>
+						<li><a href="/protected/logout">Logout</a></li>
+						<!--{#if user.role === "administrator"}-->
+							<li><a href="/protected/admin-area/users">users</a></li>
+							<li><a href="/protected/admin-area/orders">orders</a></li>
+						<!--{/if}-->
+					</ul>
+				</div>
+			</div>
+	</svelte:fragment>
+	<!-- Title of the App -->
+	<div class="app-title">
+		<h1>My Application</h1>
+	</div>
+	<svelte:fragment slot="trail" >
+		{#if userFromStore !== null}
+		<div class="menu-container" >
+			<Avatar size="lg" src={userData.avatarUrl} />
+		</div>
+		{/if}
+	</svelte:fragment>
 
-		</nav>
-	</AppBar>
-</header>
+</AppBar>
 
 <style>
-	header {
+	/* Flexbox container for the AppBar */
+	.flex-container {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
+		padding: 0 1rem;
+		height: 60px;
+		background-color: var(--surface); /* Adjust color */
+		width: 100%; /* Ensure the app bar spans full width */
+		box-sizing: border-box;
 	}
 
-
-	nav {
+	/* Menu styles */
+	.menu-container {
 		display: flex;
-		justify-content: center;
+		align-items: center;
+		position: relative;
 	}
 
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
+	.menu-btn {
+		background: none;
+		border: none;
+		font-size: 1.5rem;
+		cursor: pointer;
 	}
 
-	path {
-		fill: var(--background);
+	.menu-dropdown {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		background: white;
+		border: 1px solid var(--border-color);
+		box-shadow: var(--shadow-lg);
+		padding: 0.5rem;
 	}
 
 	ul {
-		position: relative;
+		list-style: none;
 		padding: 0;
 		margin: 0;
-		height: 3em;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		list-style: none;
-		background: var(--background);
-		background-size: contain;
 	}
 
-	li {
-		position: relative;
-		height: 100%;
+	ul li {
+		margin: 0.5rem 0;
 	}
 
-	li[aria-current='page']::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
-	}
-
-	nav a {
-		display: flex;
-		height: 100%;
-		align-items: center;
-		padding: 0 0.5rem;
-		color: var(--color-text);
-		font-weight: 700;
-		font-size: 0.8rem;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
+	ul li a {
 		text-decoration: none;
-		transition: color 0.2s linear;
+		color: inherit;
 	}
 
-	a:hover {
-		color: var(--color-theme-1);
+	/* Title styles */
+	.app-title {
+		flex-grow: 1;
+		text-align: center;
+		font-size: 1.25rem;
+	}
+
+	/* Avatar styles */
+	.avatar-container {
+		display: flex;
+		align-items: center;
+		position: relative;
+	}
+
+	.avatar-dropdown {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		background: white;
+		border: 1px solid var(--border-color);
+		box-shadow: var(--shadow-lg);
+		padding: 0.5rem;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: 1.25rem;
 	}
 </style>

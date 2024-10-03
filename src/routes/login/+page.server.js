@@ -1,15 +1,23 @@
 /** @type {import('./$types').Actions}**/
 import {fail, redirect} from "@sveltejs/kit";
+import {user} from "$lib/stores/user.js";
+import {decodeToken} from "$lib/utils/tokenUtils.js";
 
 export const actions  = {
     login: async (event) => {
         const data = await event.request.formData();
-        console.log(data)
         const email = data.get('email');
         const password = data.get('password');
-
-        // console.log(email, "--------", password)
-
+        if (
+            typeof email !== 'string' ||
+            typeof password !== 'string' ||
+            !email ||
+            !password
+        ) {
+            return fail(400, {
+                error: "Password or username are invalid"
+            })
+        }
         let response = await fetch("http://localhost:5194/login",{
             method: 'POST',
             headers:{ "Content-Type":"application/json"},
@@ -26,8 +34,14 @@ export const actions  = {
             });
         }
 
-        // console.log(token, error)
-        // console.log(JWT_SECRET)
+        const decoded = decodeToken(token);
+        const obj = {
+            id: decoded.id,
+            email: decoded.email,
+            role: decoded.role,
+            isActive: decoded.isActive
+        }
+        user.set(obj)
 
         event.cookies.set('AuthorizationToken', `Bearer ${token}`, {
             httpOnly: true,
@@ -36,7 +50,15 @@ export const actions  = {
             sameSite: 'strict',
             maxAge: 60 * 60 * 24 // 1 day
         });
+        event.cookies.set('user', JSON.stringify(obj), {
+            httpOnly: true,
+            path: '/',
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24 // 1 day
+        });
 
-        throw redirect(302, '/admin-area');
+
+        throw redirect(302, '/');
     }
 }

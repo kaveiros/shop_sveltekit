@@ -22,13 +22,18 @@ export async function handle({event, resolve}) {
 
     if(user){
         event.locals.user = user
+        if(url.pathname.includes("/admin-area")){
+            if (user.role !== "administrator"){
+               throw redirect(302, "/")
+            }
+        }
+
 
         // redirect user if he is already logged if he try to access signin or signup
         if(url.pathname.includes('/login')){
             throw redirect(302, '/')
         }
     }
-    console.log("Inside hook", )
 
 
              return await resolve(event)

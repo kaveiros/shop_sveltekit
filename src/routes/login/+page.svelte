@@ -12,11 +12,6 @@
     let email = '';
     let password = '';
 
-    function handleLogin() {
-        // Handle login logic here
-        console.log('Email:', email);
-        console.log('Password:', password);
-    }
 
     let message;
 </script>

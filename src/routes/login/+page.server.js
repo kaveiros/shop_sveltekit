@@ -6,7 +6,6 @@ import {decodeToken} from "$lib/utils/tokenUtils.js";
 export const actions  = {
     login: async (event) => {
         const data = await event.request.formData();
-        console.log(data)
         const email = data.get('email');
         const password = data.get('password');
         if (
@@ -36,7 +35,6 @@ export const actions  = {
         }
 
         const decoded = decodeToken(token);
-            console.log(decoded)
         const obj = {
             id: decoded.id,
             email: decoded.email,

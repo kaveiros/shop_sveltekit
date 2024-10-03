@@ -3,6 +3,7 @@
 	import {user} from "$lib/stores/user.js";
 
 	export  let userFromStore = user;
+
 	let userData = {}
 	// Dummy user data for the avatar
 	if (user){
@@ -18,15 +19,12 @@
 
 	function toggleMenu() {
 		const menu = document.querySelector('.menu-dropdown');
-		console.log(menu)
 		menu.hidden = !menu.hidden;
 		menuVisible = !menuVisible;
 	}
 
 	function toggleAvatarMenu() {
-		console.log("Avatar clicked")
 		const avatarMenu = document.getElementById('#dropdown');
-		console.log(avatarMenu)
 		avatarMenu.hidden = !avatarMenu.hidden;
 		avatarMenuVisible = !avatarMenuVisible;
 	}
@@ -44,9 +42,13 @@
 						<li><a href="/about">About</a></li>
 						<li><a href="/contact">Contact</a></li>
 						<li><a href="/login">Login</a></li>
-						<li><a href="/profile">Profile</a></li>
+						<li><a href="/user-profile">Profile</a></li>
 						<li><a href="/settings">Settings</a></li>
-						<li><a href="protected/logout">Logout</a></li>
+						<li><a href="/protected/logout">Logout</a></li>
+						<!--{#if user.role === "administrator"}-->
+							<li><a href="/protected/admin-area/users">users</a></li>
+							<li><a href="/protected/admin-area/orders">orders</a></li>
+						<!--{/if}-->
 					</ul>
 				</div>
 			</div>
